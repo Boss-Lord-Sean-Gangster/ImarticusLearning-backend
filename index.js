@@ -12,7 +12,9 @@ const app = express();
 
 // Middleware
 app.use(express.json());  // For parsing JSON bodies
-app.use(cors());  // Enable CORS (if needed for frontend requests)
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));  // Enable CORS (if needed for frontend requests)
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
