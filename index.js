@@ -13,7 +13,7 @@ const app = express();
 // Middleware
 app.use(express.json());  // For parsing JSON bodies
 app.use(cors({
-  origin: 'https://imarticus-learning-assignment.vercel.app/'
+  origin: '*'
 }));  // Enable CORS (if needed for frontend requests)
 
 // Import routes
