@@ -13,21 +13,21 @@ const app = express();
 // Middleware
 app.use(express.json());  // For parsing JSON bodies
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: '*'
 }));  // Enable CORS (if needed for frontend requests)
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const videoRoutes = require('./routes/videoRoutes');
-const razorpay = require('./routes/razorpay');
+const paymentRoutes = require('./routes/paymentRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 
 // Use the routes
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/videos', videoRoutes);
-app.use('/api/payments', razorpay);
+app.use('/api/payments', paymentRoutes);
 app.use('/api/documents', documentRoutes);
 
 // Connect to the MongoDB database
