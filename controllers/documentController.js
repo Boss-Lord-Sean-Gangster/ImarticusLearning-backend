@@ -3,6 +3,7 @@ const fs = require("fs");
 const pdfParse = require("pdf-parse"); // Import pdf-parse
 const cloudinary = require("../config/cloudinary");
 const Document = require("../models/Document"); // Import the Document model
+const Course = require("../models/Course");
 const { summarize } = require("../config/gemini"); // Import Gemini summarization function
 
 // Helper function to get the resource type based on file extension
@@ -51,7 +52,18 @@ const documentController = {
         summary: "", // Placeholder for summary (empty initially)
       });
 
+
       await newDocument.save();
+
+      const updatedCourse = await Course.findByIdAndUpdate(
+            req.body.courseId,
+            { $push: { documents: newDocument._id } }, // Push the new video's ID into the course's videos array
+            { new: true }
+          );
+      
+          if (!updatedCourse) {
+            return res.status(404).json({ message: "Course not found" });
+          }
 
       // Clean up the file after uploading
       if (fs.existsSync(req.file.path)) {
@@ -105,6 +117,20 @@ const documentController = {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error summarizing the document" });
+    }
+  },
+
+  async getDocumentsByCourse(req, res) {
+    try {
+      const courseId = req.params.courseId;
+
+      // Find documents by course ID
+      const documents = await Document.find({ courseId });
+
+      res.status(200).json(documents);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error fetching documents" });
     }
   }
 };
