@@ -19,7 +19,7 @@ const upload = multer({ storage });
 router.post('/upload-and-parse', upload.single('document'), documentController.uploadDocument);
 
 // Route to get documents by course
-router.get('/documents/:courseId', documentController.getDocumentsByCourse);
+router.get('/:courseId', documentController.getDocumentsByCourse);
 
 // Route to summarize a document
 router.post('/summarise/:documentId', documentController.summarizeDocument);
