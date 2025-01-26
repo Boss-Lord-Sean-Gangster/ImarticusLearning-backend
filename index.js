@@ -13,7 +13,7 @@ const app = express();
 // Middleware
 app.use(express.json());  // For parsing JSON bodies
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: 'https://imarticus-learning-assignment.vercel.app/'
 }));  // Enable CORS (if needed for frontend requests)
 
 // Import routes
