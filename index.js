@@ -21,12 +21,14 @@ const userRoutes = require('./routes/userRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const documentRoutes = require('./routes/documentRoutes');
 
 // Use the routes
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/documents', documentRoutes);
 
 // Connect to the MongoDB database
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
