@@ -123,16 +123,20 @@ const documentController = {
   async getDocumentsByCourse(req, res) {
     try {
       const courseId = req.params.courseId;
-
-      // Find documents by course ID
-      const documents = await Document.find({ courseId });
-
+  
+      // Find documents by course ID only once
+      const documents = await Document.find({ courseId }).exec(); // Using exec() to ensure query is completed
+  
+      if (documents.length === 0) {
+        return res.status(404).json({ message: "No documents found for this course" });
+      }
+  
       res.status(200).json(documents);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error fetching documents" });
     }
   }
-};
+}
 
 module.exports = documentController;
