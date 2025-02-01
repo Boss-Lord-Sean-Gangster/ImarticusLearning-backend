@@ -25,7 +25,11 @@ const documentController = {
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
-
+      
+      const { courseId, sectionTitle } = req.body;
+      if (!courseId || !sectionTitle) {
+        return res.status(400).json({ message: "Course ID and section title are required" });
+      }
       // Get the resource type based on file extension
       const resourceType = getResourceType(req.file.originalname);
 
@@ -55,15 +59,28 @@ const documentController = {
 
       await newDocument.save();
 
-      const updatedCourse = await Course.findByIdAndUpdate(
-            req.body.courseId,
-            { $push: { documents: newDocument._id } }, // Push the new video's ID into the course's videos array
-            { new: true }
-          );
-      
-          if (!updatedCourse) {
-            return res.status(404).json({ message: "Course not found" });
-          }
+      // Find the course
+      const course = await Course.findById(courseId);
+      if (!course) {
+        return res.status(404).json({ message: "Course not found" });
+      }
+
+      // Find or create the section
+      let section = course.sections.find(sec => sec.title === sectionTitle);
+      if (!section) {
+        section = { title: sectionTitle, documents: [] };
+        course.sections.push(section);
+      }
+
+      // Add document to section
+      section.documents.push(newDocument._id);
+
+      // Ensure the updated section is saved
+      course.sections = course.sections.map(sec =>
+        sec.title === sectionTitle ? section : sec
+      );
+
+      await course.save();
 
       // Clean up the file after uploading
       if (fs.existsSync(req.file.path)) {

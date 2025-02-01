@@ -2,66 +2,31 @@ const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    author: {
-      type: String,
-      required: true,
-    },
-    duration: {
-      type: String,  // e.g., "2 Years"
-      required: true,
-    },
-    price: {
-      type: String,  // e.g., "Free"
-      required: true,
-    },
-    ratings: {
-      type: Number,  // e.g., 4.5 (stars)
-    },
-    enrollments: {
-      type: Number,  // e.g., 4786
-    },
-    image: {
-      type: String,  // URL of the course image
-    },
-    curriculum: {
-      type: [String],  // List of curriculum items
-    },
+    title: { type: String, required: true, trim: true },
+    description: { type: String, required: true },
+    author: { type: String, required: true },
+    duration: { type: String, required: true },  
+    price: { type: String, required: true },
+    ratings: { type: Number },  
+    enrollments: { type: Number },  
+    image: { type: String },  
+    curriculum: { type: [String] },  
     instructor: {
       name: { type: String },
       bio: { type: String },
-      image: { type: String },  // URL of the instructor's image
+      image: { type: String },
     },
-    faqs: [
+    faqs: [{ question: String, answer: String }],
+    createdAt: { type: Date, default: Date.now },
+
+    sections: [
       {
-        question: { type: String },
-        answer: { type: String },
+        title: { type: String, required: true }, // e.g., "Introduction", "Advanced Topics"
+        videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
+        documents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Document" }],
       },
     ],
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    videos: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Video",
-      },
-    ],
-    documents: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Document",
-        }
-    ],
+
   },
   { timestamps: true }
 );
